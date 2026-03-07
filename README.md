@@ -2,9 +2,9 @@
 
 <img align="right" src="airsnitch.png" width="200px" title="AirSnitch logo created by ChatGPT">
 
-This repository contains AirSnitch, a set of attacks that enable a guest user to bypass Wi-Fi client isolation. Or put differently, it allows an adverary who can connect to your network, either as a malicious insider or by connecting to a co-located open network, to 'bypass Wi-Fi encryption'.
+This repository contains AirSnitch, a tool and set of attacks that enable a guest user to bypass Wi-Fi client isolation. With this tool, you can test the security of client isolation, and whether it can be bypassed, in home and enterprise Wi-Fi networks. Sometimes also called AP (Access Point) isolation, client isolation is not a standardized feature of Wi-Fi. For instance, client isolation normally prevents traditional ARP-based MitM attacks. However, our [NDSS'26 paper](https://papers.mathyvanhoef.com/ndss2026-airsnitch.pdf) shows that client isolation is often implemented in inconsistent and insecure ways. With AirSnitch, you can test if client isolation is implemented and configured as expected in your Wi-Fi network.
 
-With this tool, you can test the security of client isolation, and whether it can be bypassed, in home and enterprise Wi-Fi networks. Sometimes also called AP (Access Point) isolation, client isolation is not a standardized feature of Wi-Fi. For instance, client isolation normally prevents traditional ARP-based MitM attacks. However, our [NDSS'26 paper](https://papers.mathyvanhoef.com/ndss2026-airsnitch.pdf) shows that client isolation is often implemented in inconsistent and insecure ways. With AirSnitch, you can test if client isolation is implemented and configured as expected in your Wi-Fi network.
+During the initial disclosure of this research, some say that AirSnitch can 'break' Wi-Fi encryption. This is incorrect in my view, since the attacks cannot recover keys or passphrases. The term 'bypasses' is less wrong, though still not ideal. My view is that most attacks are independent of the Wi-Fi encryption being used, in the sense that simply switching to WPA3 or enabling Management Frame Protection will not, on its own, prevent the attacks. We therefore recommend using the AirSnitch tool to test the client isolation configuration of your network.
 
 <sub>Note: AirSnitch as used in our NDSS'26 paper can be found on [GitHub](https://github.com/zhouxinan/airsnitch) and [Zenodo](https://doi.org/10.5281/zenodo.17905485). This version contains various updates.</sub>
 
@@ -18,6 +18,7 @@ With this tool, you can test the security of client isolation, and whether it ca
 * [5. Extra Vulnerability Tests](#id-extraflaws)
 * [6. Defenses and mitigations](#id-defenses)
 * [7. Troubleshooting](#id-troubleshooting)
+* [8. Clarifications](#id-clarifications)
 
 
 <a id="id-intro"></a>
@@ -389,4 +390,10 @@ Lastly, we recommend that vendors implement the following warnings or mitigation
 - When using Ubuntu 22.04 on VirtualBox 7 or higher, we noticed that the terminal may not properly start after installation. To fix this, follow [these steps](https://askubuntu.com/questions/1435918/terminal-not-opening-on-ubuntu-22-04-on-virtual-box-7-0-0). Alternatively, when installing Ubuntu 22.04, check/enable the option "Skip Unattended Installation".
 
 - The test `--c2c-gtk-inject` relies on the Linux machine having set the sysctl `drop_unicast_in_l2_multicast` to `0`, since the simulated victim is a Linux client itself and the script monitors the managed interface for the injected frame.
+
+
+<a id="id-clarifications"></a>
+# [8. Clarifications](#id-clarifications)
+
+- In the paper, we tested some Enterprise Access Points to see if they _might_ be vulnerable. This does not mean they are inherently vulnerable. Whether a specific network configuration is vulnerable also depends on other configuration aspects. In other words, if an Enterprise device is listed as affected, this means its basic client isolation configuration might be vulnerable, meaning it is important to test whether networks that use them have securely configured client isolation. 
 
